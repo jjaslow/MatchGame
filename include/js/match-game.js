@@ -65,7 +65,6 @@ MatchGame.renderCards = function(cardValues, $game) {
 MatchGame.flipCard = function($card, $game) {
   if ($card.data('flipped') === true) {
     console.log('already flipped');
-    console.log('--');
     return;
   }
 
@@ -74,7 +73,6 @@ MatchGame.flipCard = function($card, $game) {
   $card.text($card.data('value'));
 
   flippedCards.push($card);
-  console.log(flippedCards);
 
   if (flippedCards.length === 2) {
     if (flippedCards[0].data('value') === flippedCards[1].data('value')) {
@@ -84,11 +82,10 @@ MatchGame.flipCard = function($card, $game) {
       flippedCards[0].css('color', 'rgb(204,204,204)');
       flippedCards[1].css('background-color', 'rgb(153,153,153)');
       flippedCards[1].css('color', 'rgb(204,204,204)');
+      flippedCards = [];
     } else {
       // nomatch
       console.log('no match');
-      console.log(flippedCards[0].data('value'));
-      console.log(flippedCards[1].data('value'));
       setTimeout(function() {
         flippedCards[0].css('background-color', 'rgb(32, 64, 86)');
         flippedCards[0].data('flipped', false);
@@ -96,8 +93,9 @@ MatchGame.flipCard = function($card, $game) {
         flippedCards[1].css('background-color', 'rgb(32, 64, 86)');
         flippedCards[1].data('flipped', false);
         flippedCards[1].text('');
+        flippedCards = [];
       }, 350);
     }
-    flippedCards = [];
+    // flippedCards = [];
   }
 };

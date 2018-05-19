@@ -10,22 +10,28 @@ MatchGameTests.runTests = function() {
 
 MatchGameTests.testGenerateCardValues = function(errors) {
   // Test that generateCardValues function exists.
-  var hasGenerateCardValues = MatchGame.generateCardValues && typeof MatchGame.generateCardValues === 'function';
+  var hasGenerateCardValues =
+    MatchGame.generateCardValues &&
+    typeof MatchGame.generateCardValues === 'function';
   if (!hasGenerateCardValues) {
-    errors.push("generateCardValues: MatchGame object should have a function called generateCardValues.");
+    errors.push(
+      'generateCardValues: MatchGame object should have a function called generateCardValues.'
+    );
     // If generateCardValues function is missing, remaining tests will not work.
     return;
   }
 
   var values = MatchGame.generateCardValues();
   if (!values || values.constructor !== Array) {
-    errors.push("generateCardValues: should return an array.");
+    errors.push('generateCardValues: should return an array.');
     // If generateCardValues does not return an array, remaining tests will not work.
     return;
   }
 
   if (values.length !== 16) {
-    errors.push("generateCardValues: should return an array containing 16 values.");
+    errors.push(
+      'generateCardValues: should return an array containing 16 values.'
+    );
   }
 
   // Get number of each value.
@@ -37,15 +43,20 @@ MatchGameTests.testGenerateCardValues = function(errors) {
 
   for (var i = 1; i <= 8; i++) {
     if (valueCounts[i] !== 2) {
-      errors.push("generateCardValues: should return an array containing two copies of each card, values 1 through 8.");
+      errors.push(
+        'generateCardValues: should return an array containing two copies of each card, values 1 through 8.'
+      );
     }
   }
 };
 
 MatchGameTests.testRenderCards = function(errors) {
-  var hasRenderCards = MatchGame.renderCards && typeof MatchGame.renderCards === 'function';
+  var hasRenderCards =
+    MatchGame.renderCards && typeof MatchGame.renderCards === 'function';
   if (!hasRenderCards) {
-    errors.push("renderCards: MatchGame object should have a function called renderCards.");
+    errors.push(
+      'renderCards: MatchGame object should have a function called renderCards.'
+    );
     // If renderCards function is missing, remaining tests will not work.
     return;
   }
@@ -56,25 +67,31 @@ MatchGameTests.testRenderCards = function(errors) {
   MatchGame.renderCards(cardValues, $game);
 
   if ($game.find('h1').length) {
-    errors.push("renderCards: Game should clear old HTML.");
+    errors.push('renderCards: Game should clear old HTML.');
   }
 
   var $cards = $game.find('.card');
   if ($cards.length !== 16) {
-    errors.push("renderCards: Game should have sixteen .card objects.");
+    errors.push('renderCards: Game should have sixteen .card objects.');
   }
 
   $cards.each(function(cardIndex, card) {
     var $card = $(card);
     if (!$card.data('value')) {
-      errors.push("renderCards: All cards should have a data attribute called 'value'.");
+      errors.push(
+        "renderCards: All cards should have a data attribute called 'value'."
+      );
     }
     if ($card.data('value') !== cardValues[cardIndex]) {
-      errors.push("renderCards: Card data 'value' should equal corresponding value in cardValues.");
+      errors.push(
+        "renderCards: Card data 'value' should equal corresponding value in cardValues."
+      );
     }
 
     if (!$card.data('color')) {
-      errors.push("renderCards: All cards should have a data attribute called 'color'.");
+      errors.push(
+        "renderCards: All cards should have a data attribute called 'color'."
+      );
     }
   });
 };
@@ -96,14 +113,21 @@ MatchGameTests.testFlipCard = function(errors) {
 
   MatchGame.flipCard($card0, $game);
   if ($card0.text() !== '1') {
-    errors.push("flipCard: Flipping a card should set its data 'value' as its visible HTML text.");
+    errors.push(
+      "flipCard: Flipping a card should set its data 'value' as its visible HTML text."
+    );
   }
   if ($card0.css('background-color') === faceDownColor) {
-    errors.push("flipCard: Flipping a card should change its background color.");
+    errors.push(
+      'flipCard: Flipping a card should change its background color.'
+    );
   }
   MatchGame.flipCard($card0, $game);
-  if ($card0.text() !== '1' || $card0.css('background-color') === faceDownColor) {
-    errors.push("flipCard: Flipping a flipped card should keep it flipped up.");
+  if (
+    $card0.text() !== '1' ||
+    $card0.css('background-color') === faceDownColor
+  ) {
+    errors.push('flipCard: Flipping a flipped card should keep it flipped up.');
   }
 
   MatchGame.renderCards(cardValues, $game);
@@ -116,21 +140,40 @@ MatchGameTests.testFlipCard = function(errors) {
   MatchGame.flipCard($card0, $game);
   MatchGame.flipCard($card2, $game);
   if (!mockSetTimeout.getCalls().length) {
-    errors.push("flipCard: Flipping two different cards should call .setTimeout() before flipping back down.");
+    errors.push(
+      'flipCard: Flipping two different cards should call .setTimeout() before flipping back down.'
+    );
   } else {
-    if (!mockSetTimeout.getCalls()[0][0] || typeof mockSetTimeout.getCalls()[0][0] !== 'function') {
-      errors.push("flipCard: .setTimeout() should be called with a function as its first argument.");
+    if (
+      !mockSetTimeout.getCalls()[0][0] ||
+      typeof mockSetTimeout.getCalls()[0][0] !== 'function'
+    ) {
+      errors.push(
+        'flipCard: .setTimeout() should be called with a function as its first argument.'
+      );
     } else {
       mockSetTimeout.getCalls()[0][0]();
       if ($card0.text() || $card2.text()) {
-        errors.push("flipCard: Flipping two different cards should clear their text after .setTimeout().");
+        errors.push(
+          'flipCard: Flipping two different cards should clear their text after .setTimeout().'
+        );
       }
-      if ($card0.css('background-color') !==  'rgb(32, 64, 86)' || $card2.css('background-color') !== 'rgb(32, 64, 86)') {
-        errors.push("flipCard: Flipping two different cards should set their background color back to rgb(32, 64, 86) after .setTimeout().");
+      if (
+        $card0.css('background-color') !== 'rgb(32, 64, 86)' ||
+        $card2.css('background-color') !== 'rgb(32, 64, 86)'
+      ) {
+        errors.push(
+          'flipCard: Flipping two different cards should set their background color back to rgb(32, 64, 86) after .setTimeout().'
+        );
       }
     }
-    if (!mockSetTimeout.getCalls()[0][1] || typeof mockSetTimeout.getCalls()[0][1] !== 'number') {
-      errors.push("flipCard: .setTimeout() should be called with a number as its second argument.");
+    if (
+      !mockSetTimeout.getCalls()[0][1] ||
+      typeof mockSetTimeout.getCalls()[0][1] !== 'number'
+    ) {
+      errors.push(
+        'flipCard: .setTimeout() should be called with a number as its second argument.'
+      );
     }
   }
   mockSetTimeout.restore();
@@ -144,13 +187,25 @@ MatchGameTests.testFlipCard = function(errors) {
   MatchGame.flipCard($card1, $game);
 
   if (!$card0.text() || !$card1.text()) {
-    errors.push("flipCard: Flipping two matching cards should keep their values.");
+    errors.push(
+      'flipCard: Flipping two matching cards should keep their values.'
+    );
   }
-  if ($card0.css('background-color') !==  'rgb(153, 153, 153)' || $card1.css('background-color') !== 'rgb(153, 153, 153)') {
-    errors.push("flipCard: Flipping two matching cards should set their background color to rgb(153, 153, 153).");
+  if (
+    $card0.css('background-color') !== 'rgb(153, 153, 153)' ||
+    $card1.css('background-color') !== 'rgb(153, 153, 153)'
+  ) {
+    errors.push(
+      'flipCard: Flipping two matching cards should set their background color to rgb(153, 153, 153).'
+    );
   }
-  if ($card0.css('color') ===  'rgb(32, 64, 86)' || $card1.css('color') === 'rgb(32, 64, 86)') {
-    errors.push("flipCard: Flipping two matching cards should set their color to rgb(32, 64, 86).");
+  if (
+    $card0.css('color') === 'rgb(32, 64, 86)' ||
+    $card1.css('color') === 'rgb(32, 64, 86)'
+  ) {
+    errors.push(
+      'flipCard: Flipping two matching cards should set their color to rgb(32, 64, 86).'
+    );
   }
 };
 

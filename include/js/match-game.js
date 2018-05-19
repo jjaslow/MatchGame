@@ -9,17 +9,21 @@ var MatchGame = {};
   Generates and returns an array of matching card values.
  */
 
+$(document).ready(function() {
+  MatchGame.renderCards(MatchGame.generateCardValues(), $('#game'));
+});
+
 MatchGame.generateCardValues = function() {
   const startValues = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
-  const gameBoard = [];
+  const cardValues = [];
   while (startValues.length > 0) {
     let x = Math.floor(Math.random() * startValues.length);
     let y = startValues[x];
     startValues.splice(x, 1);
-    gameBoard.push(y);
+    cardValues.push(y);
   }
 
-  return gameBoard;
+  return cardValues;
 };
 
 /*
@@ -27,7 +31,26 @@ MatchGame.generateCardValues = function() {
   object.
 */
 
-MatchGame.renderCards = function(cardValues, $game) {};
+MatchGame.renderCards = function(cardValues, $game) {
+  const colors = [
+    'hsl(25,85%,65%)',
+    'hsl(55,85%,65%)',
+    'hsl(90,85%,65%)',
+    'hsl(160,85%,65%)',
+    'hsl(220,85%,65%)',
+    'hsl(265,85%,65%)',
+    'hsl(310,85%,65%)',
+    'hsl(360,85%,65%)'
+  ];
+  $game.empty();
+  for (let x = 0; x < cardValues.length; x++) {
+    let colorValue = cardValues[x];
+    let color = colors[colorValue - 1];
+    let $card = $('<div class="col-xs-3 card"></div>');
+    $card.data({ value: cardValues[x], flipped: false, color: color });
+    $game.append($card);
+  }
+};
 
 /*
   Flips over a given card and checks to see if two cards are flipped over.
